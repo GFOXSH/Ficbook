@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Build;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.DownloadListener;
 import android.webkit.ValueCallback;
@@ -17,6 +18,7 @@ import android.content.*;
 
 public class MainActivity extends Activity
 {
+	final Activity activity = this;
 	private WebView mainWebView;
 	private ValueCallback<Uri> mUploadMessage;
 	public ValueCallback<Uri[]> uploadMessage;
@@ -51,6 +53,7 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
 	{
         super.onCreate(savedInstanceState);
+		this.getWindow().requestFeature(Window.FEATURE_PROGRESS);
 		setContentView(R.layout.main);
 
         mainWebView = (WebView) findViewById(R.id.mainWebView);
@@ -139,6 +142,15 @@ public class MainActivity extends Activity
 					i.addCategory(Intent.CATEGORY_OPENABLE);
 					i.setType("file/*");
 					startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
+				}
+				
+				public void onProgressChanged(WebView view, int progress)
+				{
+					activity.setTitle(R.string.loading);
+					activity.setProgress(progress * 100);
+  
+					if(progress == 100)
+						activity.setTitle(R.string.app_name);
 				}
 			});
 		if (savedInstanceState ==null)
