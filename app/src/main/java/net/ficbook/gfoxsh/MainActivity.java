@@ -141,7 +141,10 @@ public class MainActivity extends Activity
 					startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
 				}
 			});
-        mainWebView.loadUrl("http://ficbook.net");
+		if (savedInstanceState ==null)
+		{
+			mainWebView.loadUrl("http://ficbook.net");
+		}
     }
 
 
@@ -163,6 +166,20 @@ public class MainActivity extends Activity
 		{
 			super.onBackPressed();
 		}
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		mainWebView.saveState(outState);
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		super.onRestoreInstanceState(savedInstanceState);
+		mainWebView.restoreState(savedInstanceState);
 	}
 
     private class MyCustomWebViewClient extends WebViewClient
