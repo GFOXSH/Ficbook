@@ -89,8 +89,6 @@ public class MainActivity extends Activity
 
 		mainWebView.setWebChromeClient(new WebChromeClient()
 			{
-				// For 3.0+ Devices (Start)
-				// onActivityResult attached before constructor
 				protected void openFileChooser(ValueCallback uploadMsg, String acceptType)
 				{
 					mUploadMessage = uploadMsg;
@@ -100,8 +98,6 @@ public class MainActivity extends Activity
 					startActivityForResult(Intent.createChooser(i, "File Browser"), FILECHOOSER_RESULTCODE);
 				}
 
-
-				// For Lollipop 5.0+ Devices
 				public boolean onShowFileChooser(WebView mainWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams)
 				{
 					if (uploadMessage != null)
@@ -125,14 +121,13 @@ public class MainActivity extends Activity
 					return true;
 				}
 
-				//For Android 4.1 only
 				protected void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture)
 				{
 					mUploadMessage = uploadMsg;
-					Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-					i.addCategory(Intent.CATEGORY_OPENABLE);
-					i.setType("file/*");
-					startActivityForResult(Intent.createChooser(i, "File Browser"), FILECHOOSER_RESULTCODE);
+					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+					intent.addCategory(Intent.CATEGORY_OPENABLE);
+					intent.setType("file/*");
+					startActivityForResult(Intent.createChooser(intent, "File Browser"), FILECHOOSER_RESULTCODE);
 				}
 
 				protected void openFileChooser(ValueCallback<Uri> uploadMsg)
@@ -153,7 +148,7 @@ public class MainActivity extends Activity
 						activity.setTitle(R.string.app_name);
 				}
 			});
-		if (savedInstanceState ==null)
+		if (savedInstanceState == null)
 		{
 			mainWebView.loadUrl("http://ficbook.net");
 		}
