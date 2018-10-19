@@ -64,13 +64,7 @@ public class MainActivity extends Activity
 		webSettings.setAllowFileAccess(true);
 		webSettings.setAppCacheEnabled(true);
 		webSettings.setJavaScriptEnabled(true);
-		webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
-
-		if (!isNetworkAvailable())
-		{
-			webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        }
-
+		cachemode();
         mainWebView.setWebViewClient(new MyCustomWebViewClient());
         mainWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 		mainWebView.setDownloadListener(new DownloadListener() {
@@ -124,10 +118,10 @@ public class MainActivity extends Activity
 				protected void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture)
 				{
 					mUploadMessage = uploadMsg;
-					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-					intent.addCategory(Intent.CATEGORY_OPENABLE);
-					intent.setType("file/*");
-					startActivityForResult(Intent.createChooser(intent, "File Browser"), FILECHOOSER_RESULTCODE);
+					Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+					i.addCategory(Intent.CATEGORY_OPENABLE);
+					i.setType("file/*");
+					startActivityForResult(Intent.createChooser(i, "File Browser"), FILECHOOSER_RESULTCODE);
 				}
 
 				protected void openFileChooser(ValueCallback<Uri> uploadMsg)
@@ -154,12 +148,22 @@ public class MainActivity extends Activity
 		}
     }
 
+	public void cachemode() {
+		WebSettings webSettings = mainWebView.getSettings();
+		if (isNetworkAvailable()) {
+		webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+		}
+		else {
+		webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+		}
+	}
 
 	private boolean isNetworkAvailable()
 	{
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+		
 	}
 
 	@Override
@@ -194,7 +198,8 @@ public class MainActivity extends Activity
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url)
 		{
-            view.loadUrl(url);
+			cachemode();
+			view.loadUrl(url);
             return true;
         }
     }
