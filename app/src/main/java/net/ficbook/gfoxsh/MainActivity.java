@@ -1,4 +1,4 @@
-﻿package net.ficbook.gfoxsh;
+package net.ficbook.gfoxsh;
 
 import android.app.Activity;
 import android.net.ConnectivityManager;
@@ -126,19 +126,14 @@ public class MainActivity extends Activity {
     }
 
     public void cachemode() {
-        WebSettings webSettings = mainWebView.getSettings();
-        if (isNetworkAvailable()) {
+		WebSettings webSettings = mainWebView.getSettings();
+		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
             webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         } else {
             webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         }
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-
     }
 
     @Override
