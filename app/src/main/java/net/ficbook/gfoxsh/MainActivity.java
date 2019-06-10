@@ -65,8 +65,6 @@ public class MainActivity extends Activity {
                 startActivity(i);
             }
         });
-        webSettings.setAllowFileAccess(true);
-        webSettings.setAllowFileAccess(true);
         webSettings.setAllowContentAccess(true);
 
         mainWebView.setWebChromeClient(new WebChromeClient() {
